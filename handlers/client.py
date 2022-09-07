@@ -32,17 +32,19 @@ async def delta(message: types.Message, state: FSMContext):
                                  read_only=True)
             sheet = book.active
             market = 'FUTURE'
+            await message.answer("Формирую отчет")
+            res = main_process(delta, sheet, market)
+            print(res)
             while True:
-                start_time = time.time()
                 try:
-                    res = main_process(delta, sheet, market)
-                    await message.answer(res)
-                    time.sleep(86400)
+                    for i in res:
+                        await message.answer(i)
+                        time.sleep(86400)
                 except:
                     logging.info("Ошибка в функции main_process, 29 строка client.py")
                     await message.answer("Ошибка обработки")
 
-        except:
+        except FileNotFoundError:
             logging.error("Файл mark.xlsx не найден")
             await message.answer("Файл mark.xlsx не найден")
             await state.finish()
