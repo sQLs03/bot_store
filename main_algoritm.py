@@ -123,13 +123,20 @@ def MinusOneWeek(firstdate):
 
 
 def getDifferent(BuyDateList, sl):
-    z = (sl - BuyDateList) * 100 / (BuyDateList)
+    try:
+        z = (sl - BuyDateList) * 100 / (BuyDateList)
+    except TypeError:
+        return 0
     percents = z
     return abs(percents)
 
 
 def main_process(delta, sheet, market):
-        delta, sheet, market = delta, sheet, market
+    while True:
+        sheet = sheet
+        market = market
+        delta = int(delta)
+        res = []
         for row in range(2, 135):
             ticker = sheet[row][0].value
             tf = '1h'
@@ -147,6 +154,9 @@ def main_process(delta, sheet, market):
                 minimum = min(df['Low'])
 
             if getDifferent(maximum, minimum) > delta:
-                return ticker  # Если монета соответствует условию, то она отправляется пользователю раз в день в течение недели
+                print(ticker)
+                res.append(ticker)  # Если монета соответствует условию, то она отправляется пользователю раз в день в течение недели
+        return res
+            #time.sleep(86400)
 
 
